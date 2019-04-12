@@ -34,9 +34,9 @@ export default class AssetDiscoveryService extends PercyClientService {
 
   async setup() {
     profile('-> assetDiscoveryService.puppeteer.launch')
-    this.browser = await puppeteer.launch({
-      args: ['--no-sandbox'],
-      handleSIGINT : false,
+    const { body: { webSocketDebuggerUrl } } = await axios.get('http://localhost:9222/json/version')
+    this.browser = await puppeteer.connect({
+      browserWSEndpoint: webSocketDebuggerUrl
     })
     profile('-> assetDiscoveryService.puppeteer.launch')
 
