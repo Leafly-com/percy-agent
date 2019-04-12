@@ -4,6 +4,7 @@ import logger, {logError, profile} from '../utils/logger'
 import waitForNetworkIdle from '../utils/wait-for-network-idle'
 import PercyClientService from './percy-client-service'
 import ResponseService from './response-service'
+import axios from 'axios';
 
 interface AssetDiscoveryOptions {
   networkIdleTimeout?: number
@@ -34,7 +35,7 @@ export default class AssetDiscoveryService extends PercyClientService {
 
   async setup() {
     profile('-> assetDiscoveryService.puppeteer.launch')
-    const { body: { webSocketDebuggerUrl } } = await axios.get('http://chromium:9222/json/version')
+    const { data: { data: { webSocketDebuggerUrl } } } = await axios.get('http://chromium:9222/json/version')
     this.browser = await puppeteer.connect({
       browserWSEndpoint: webSocketDebuggerUrl
     })
